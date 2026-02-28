@@ -1,0 +1,100 @@
+@if (cartService.cartOpen()) {
+<!-- Backdrop -->
+<div class="cart-backdrop" (click)="close()"></div>
+
+<!-- Drawer -->
+<aside class="cart-drawer">
+    <!-- Header -->
+    <div class="cart-drawer__header">
+        <div class="cart-drawer__title">
+            <span class="cart-drawer__label">Your Cart</span>
+            @if (cartService.cartCount() > 0) {
+            <span class="cart-drawer__count">{{ cartService.cartCount() }}</span>
+            }
+        </div>
+        <button class="cart-drawer__close" (click)="close()" aria-label="Close Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="cart-drawer__divider"></div>
+
+    <!-- Items -->
+    <div class="cart-drawer__body">
+        @if (cartService.cartItems().length === 0) {
+        <div class="cart-drawer__empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <p class="cart-drawer__empty-text">Your cart is empty</p>
+            <a routerLink="/shop" class="cart-drawer__shop-link" (click)="close()">
+                Explore Collection
+            </a>
+        </div>
+        } @else {
+        <ul class="cart-drawer__list">
+            @for (item of cartService.cartItems(); track item.product.id + item.selectedSize +
+            item.selectedFrameColor.name) {
+            <li class="cart-item">
+                <div class="cart-item__image">
+                    <img [src]="item.product.images[0]" [alt]="item.product.name"
+                        onerror="this.src='assets/placeholder.jpg'">
+                </div>
+                <div class="cart-item__info">
+                    <div class="cart-item__collection">{{ item.product.collection }}</div>
+                    <div class="cart-item__name">{{ item.product.name }}</div>
+                    <div class="cart-item__meta">
+                        <span>{{ item.selectedFrameColor.name }}</span>
+                        <span>·</span>
+                        <span>{{ item.selectedLensShade.name }}</span>
+                        <span>·</span>
+                        <span>{{ item.selectedSize }}</span>
+                    </div>
+                    <div class="cart-item__bottom">
+                        <div class="cart-item__qty">
+                            <button
+                                (click)="decrement(item.product.id, item.selectedSize, item.selectedFrameColor.name, item.quantity)">−</button>
+                            <span>{{ item.quantity }}</span>
+                            <button
+                                (click)="increment(item.product.id, item.selectedSize, item.selectedFrameColor.name, item.quantity)">+</button>
+                        </div>
+                        <span class="cart-item__price">{{ item.product.price * item.quantity | currencyFormat }}</span>
+                    </div>
+                </div>
+                <button class="cart-item__remove"
+                    (click)="remove(item.product.id, item.selectedSize, item.selectedFrameColor.name)"
+                    aria-label="Remove item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </li>
+            }
+        </ul>
+        }
+    </div>
+
+    @if (cartService.cartItems().length > 0) {
+    <div class="cart-drawer__footer">
+        <div class="cart-drawer__divider"></div>
+        <div class="cart-drawer__subtotal">
+            <span class="cart-drawer__subtotal-label">Subtotal</span>
+            <span class="cart-drawer__subtotal-value">{{ cartService.cartTotal() | currencyFormat }}</span>
+        </div>
+        <p class="cart-drawer__tax-note">Inclusive of all taxes · Free shipping above ₹ 2,999</p>
+        <a routerLink="/checkout" class="cart-drawer__checkout-btn" (click)="close()">
+            Proceed to Checkout
+        </a>
+    </div>
+    }
+</aside>
+}

@@ -1,0 +1,197 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-sticky);
+    transition: background-color var(--transition-base), border-color var(--transition-base);
+    border-bottom: 1px solid transparent;
+
+    &.scrolled {
+        background-color: rgba(8, 8, 8, 0.95);
+        border-bottom-color: var(--color-border);
+        backdrop-filter: blur(12px);
+    }
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--space-xl);
+        height: 72px;
+        max-width: 1400px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            padding: 0 var(--space-md);
+            height: 60px;
+        }
+    }
+
+    &__logo {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        flex-shrink: 0;
+    }
+
+    &__logo-text {
+        font-family: var(--font-display);
+        font-size: 20px;
+        font-weight: 400;
+        letter-spacing: 0.2em;
+        color: var(--color-white);
+        transition: color var(--transition-base);
+
+        &:hover {
+            color: var(--color-gold);
+        }
+    }
+
+    &__links {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xl);
+        list-style: none;
+
+        @media (max-width: 1024px) {
+            display: none;
+        }
+    }
+
+    &__link {
+        font-family: var(--font-body);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+        text-decoration: none;
+        transition: color var(--transition-base);
+        padding-bottom: 2px;
+
+        &:hover,
+        &.active {
+            color: var(--color-white);
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        flex-shrink: 0;
+    }
+
+    &__cart-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        color: var(--color-white);
+        cursor: pointer;
+        border: none;
+        background: none;
+        transition: color var(--transition-base);
+
+        &:hover {
+            color: var(--color-gold);
+        }
+
+        svg {
+            display: block;
+        }
+    }
+
+    &__cart-count {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        background: var(--color-gold);
+        color: var(--color-bg);
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 600;
+        font-family: var(--font-body);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        animation: cartBounce 0.4s ease;
+    }
+
+    &__hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 44px;
+        height: 44px;
+        gap: 5px;
+        cursor: pointer;
+        border: none;
+        background: none;
+
+        @media (max-width: 1024px) {
+            display: flex;
+        }
+
+        span {
+            display: block;
+            width: 22px;
+            height: 1.5px;
+            background: var(--color-white);
+            transition: all var(--transition-base);
+            transform-origin: center;
+        }
+
+        &.open {
+            span:nth-child(1) {
+                transform: translateY(6.5px) rotate(45deg);
+            }
+
+            span:nth-child(2) {
+                opacity: 0;
+            }
+
+            span:nth-child(3) {
+                transform: translateY(-6.5px) rotate(-45deg);
+            }
+        }
+    }
+
+    // Mobile Menu
+    &__mobile-menu {
+        background: var(--color-surface);
+        border-bottom: var(--border);
+        padding: var(--space-xl) var(--space-xl);
+        animation: slideDown 0.3s ease;
+
+        ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        a {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: color var(--transition-base);
+            display: block;
+
+            &:hover {
+                color: var(--color-gold);
+            }
+        }
+    }
+}

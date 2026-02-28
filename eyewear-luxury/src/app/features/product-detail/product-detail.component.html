@@ -1,0 +1,166 @@
+@if (product(); as p) {
+<div class="product-detail">
+
+    <!-- LEFT: 3D Scene -->
+    <div class="product-detail__viewer">
+        <app-three-scene [product]="p"></app-three-scene>
+    </div>
+
+    <!-- RIGHT: Product Info -->
+    <div class="product-detail__info">
+        <div class="product-detail__info-inner">
+
+            <!-- Breadcrumb -->
+            <nav class="pd-breadcrumb">
+                <a routerLink="/">Home</a>
+                <span>›</span>
+                <a routerLink="/shop">Collection</a>
+                <span>›</span>
+                <span>{{ p.name }}</span>
+            </nav>
+
+            <!-- Collection -->
+            <span class="label pd-collection">{{ p.collection }}</span>
+
+            <!-- Name -->
+            <h1 class="pd-name">{{ p.name }}</h1>
+
+            <!-- Rating -->
+            <div class="pd-rating">
+                <div class="pd-stars">
+                    @for (s of stockStars; track s) {
+                    <svg width="13" height="13" viewBox="0 0 24 24"
+                        [attr.fill]="s <= Math.round(p.rating) ? '#C9A84C' : 'none'" stroke="#C9A84C"
+                        stroke-width="1.5">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    }
+                </div>
+                <span class="pd-rating-text">{{ p.rating }} ({{ p.reviewCount }} reviews)</span>
+            </div>
+
+            <div class="pd-divider"></div>
+
+            <!-- Price -->
+            <div class="pd-pricing">
+                <span class="pd-price">{{ p.price | currencyFormat }}</span>
+                @if (p.originalPrice) {
+                <span class="pd-original-price">{{ p.originalPrice | currencyFormat }}</span>
+                }
+            </div>
+            <p class="pd-tax-note">Inclusive of all taxes</p>
+
+            <div class="pd-divider"></div>
+
+            <!-- Frame Color -->
+            <div class="pd-option-group">
+                <span class="pd-option-label">Frame Color — <em>{{ selectedColor()?.name }}</em></span>
+                <div class="pd-swatches">
+                    @for (color of p.frameColors; track color.name) {
+                    <button class="pd-swatch" [style.background]="color.hex"
+                        [class.active]="selectedColor()?.name === color.name" (click)="selectedColor.set(color)"
+                        [attr.title]="color.name">
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Lens Shade -->
+            <div class="pd-option-group">
+                <span class="pd-option-label">Lens Shade — <em>{{ selectedLens()?.name }}</em></span>
+                <div class="pd-swatches">
+                    @for (lens of p.lensShades; track lens.name) {
+                    <button class="pd-swatch" [style.background]="lens.hex"
+                        [class.active]="selectedLens()?.name === lens.name" (click)="selectedLens.set(lens)"
+                        [attr.title]="lens.name">
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Size -->
+            <div class="pd-option-group">
+                <span class="pd-option-label">Frame Size</span>
+                <div class="pd-sizes">
+                    @for (size of p.sizes; track size) {
+                    <button class="pd-size-btn" [class.active]="selectedSize() === size"
+                        (click)="selectedSize.set(size)">
+                        {{ size }}
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="pd-option-group">
+                <span class="pd-option-label">Quantity</span>
+                <div class="pd-qty">
+                    <button (click)="decrementQty()">−</button>
+                    <span>{{ quantity() }}</span>
+                    <button (click)="incrementQty()">+</button>
+                </div>
+            </div>
+
+            <div class="pd-divider"></div>
+
+            <!-- CTA Buttons -->
+            <div class="pd-actions">
+                <button class="pd-btn-primary" [class.added]="addedToCart()" (click)="addToCart()">
+                    @if (addedToCart()) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Added to Cart
+                    } @else {
+                    Add to Cart
+                    }
+                </button>
+                <a routerLink="/checkout" class="pd-btn-secondary" (click)="addToCart()">
+                    Buy Now
+                </a>
+            </div>
+
+            <div class="pd-divider"></div>
+
+            <!-- Accordion: Product Details -->
+            <div class="pd-accordion" [class.open]="detailsOpen()">
+                <button class="pd-accordion__heading" (click)="toggleDetails()">
+                    <span>Product Details</span>
+                    <span class="pd-accordion__icon">{{ detailsOpen() ? '−' : '+' }}</span>
+                </button>
+                <div class="pd-accordion__body">
+                    <p class="pd-description">{{ p.description }}</p>
+                    <ul class="pd-specs">
+                        @for (spec of p.specs; track spec.label) {
+                        <li class="pd-spec">
+                            <span class="pd-spec__label">{{ spec.label }}</span>
+                            <span class="pd-spec__value">{{ spec.value }}</span>
+                        </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Accordion: Shipping -->
+            <div class="pd-accordion" [class.open]="shippingOpen()">
+                <button class="pd-accordion__heading" (click)="toggleShipping()">
+                    <span>Shipping & Returns</span>
+                    <span class="pd-accordion__icon">{{ shippingOpen() ? '−' : '+' }}</span>
+                </button>
+                <div class="pd-accordion__body">
+                    <p>Free shipping on orders above ₹ 2,999. Standard delivery in 3–5 business days.</p>
+                    <p style="margin-top:8px">Easy 15-day returns on unused items in original packaging. Prescription
+                        lenses are non-returnable.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+} @else {
+<div class="pd-loading container">
+    <p>Loading product...</p>
+</div>
+}

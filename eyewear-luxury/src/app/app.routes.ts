@@ -1,0 +1,34 @@
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+    {
+        path: '',
+        loadComponent: () =>
+            import('./features/home/home.component').then(m => m.HomeComponent),
+    },
+    {
+        path: 'shop',
+        loadComponent: () =>
+            import('./features/shop/shop.component').then(m => m.ShopComponent),
+    },
+    {
+        path: 'product/:id',
+        loadComponent: () =>
+            import('./features/product-detail/product-detail.component').then(
+                m => m.ProductDetailComponent
+            ),
+    },
+    {
+        path: 'checkout',
+        loadComponent: () =>
+            import('./features/checkout/checkout.component').then(m => m.CheckoutComponent),
+    },
+    {
+        path: 'order-confirmation',
+        loadComponent: () =>
+            import('./features/order-confirmation/order-confirmation.component').then(
+                m => m.OrderConfirmationComponent
+            ),
+    },
+    { path: '**', redirectTo: '' },
+];

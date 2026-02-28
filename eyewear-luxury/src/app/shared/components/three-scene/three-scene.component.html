@@ -1,0 +1,48 @@
+<div class="three-scene">
+    <!-- Canvas -->
+    <div class="three-scene__canvas-wrap">
+        <canvas #threeCanvas class="three-scene__canvas"></canvas>
+
+        <!-- Hint overlay -->
+        @if (showHint()) {
+        <div class="three-scene__hint">
+            <span class="three-scene__hint-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 13.5a9 9 0 1 1-18 0A9 9 0 0 1 21 13.5z" />
+                    <path d="M12 7v5l3 3" />
+                </svg>
+                Drag to rotate
+            </span>
+            <span class="three-scene__hint-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Scroll to zoom
+            </span>
+        </div>
+        }
+
+        <!-- Reset -->
+        <button class="three-scene__reset" (click)="resetView()" aria-label="Reset View">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round">
+                <path d="M1 4v6h6" />
+                <path d="M3.51 15a9 9 0 1 0 .49-3.95" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Thumbnail strip -->
+    @if (product.images.length > 1) {
+    <div class="three-scene__thumbs">
+        @for (img of product.images; track img; let i = $index) {
+        <button class="three-scene__thumb" [class.active]="activeThumb() === i" (click)="loadImage(i)"
+            [attr.aria-label]="'View angle ' + (i + 1)">
+            <img [src]="img" [alt]="product.name + ' view ' + (i + 1)" loading="lazy"
+                onerror="this.src='assets/placeholder.jpg'">
+        </button>
+        }
+    </div>
+    }
+</div>

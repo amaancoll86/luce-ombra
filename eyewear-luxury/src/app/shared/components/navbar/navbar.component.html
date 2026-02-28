@@ -1,0 +1,78 @@
+<nav class="navbar" [class.scrolled]="isScrolled()">
+  <div class="navbar__inner">
+
+    <!-- Logo -->
+    <a routerLink="/" class="navbar__logo" (click)="closeMobile()">
+      <span class="navbar__logo-text">LUCE & OMBRA</span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <ul class="navbar__links">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+           class="navbar__link hover-underline">Home</a>
+      </li>
+      <li>
+        <a routerLink="/shop" routerLinkActive="active"
+           class="navbar__link hover-underline">Collection</a>
+      </li>
+      <li>
+        <a routerLink="/shop" [queryParams]="{category:'sunglasses'}"
+           class="navbar__link hover-underline">Sunglasses</a>
+      </li>
+      <li>
+        <a routerLink="/shop" [queryParams]="{category:'optical'}"
+           class="navbar__link hover-underline">Optical</a>
+      </li>
+      <li>
+        <a routerLink="/shop" [queryParams]="{category:'limited'}"
+           class="navbar__link hover-underline">Limited</a>
+      </li>
+    </ul>
+
+    <!-- Actions -->
+    <div class="navbar__actions">
+      <!-- Cart Button -->
+      <button class="navbar__cart-btn" (click)="cartService.toggleCart()" aria-label="Open Cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        @if (cartService.cartCount() > 0) {
+          <span class="navbar__cart-count">{{ cartService.cartCount() }}</span>
+        }
+      </button>
+
+      <!-- Hamburger -->
+      <button class="navbar__hamburger" (click)="toggleMobile()"
+              aria-label="Toggle Menu" [class.open]="mobileMenuOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (mobileMenuOpen()) {
+    <div class="navbar__mobile-menu">
+      <ul>
+        <li><a routerLink="/" (click)="closeMobile()">Home</a></li>
+        <li><a routerLink="/shop" (click)="closeMobile()">Collection</a></li>
+        <li><a routerLink="/shop" [queryParams]="{category:'sunglasses'}" (click)="closeMobile()">Sunglasses</a></li>
+        <li><a routerLink="/shop" [queryParams]="{category:'optical'}" (click)="closeMobile()">Optical</a></li>
+        <li><a routerLink="/shop" [queryParams]="{category:'limited'}" (click)="closeMobile()">Limited Edition</a></li>
+      </ul>
+    </div>
+  }
+</nav>
+
+<!-- Cart Drawer -->
+<app-cart-drawer></app-cart-drawer>
+
+<!-- Overlay when mobile menu is open -->
+@if (mobileMenuOpen()) {
+  <div class="overlay" (click)="closeMobile()"></div>
+}

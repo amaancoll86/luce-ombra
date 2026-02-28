@@ -1,0 +1,231 @@
+<div class="shop">
+
+    <!-- Page Header -->
+    <div class="shop__header">
+        <div class="container">
+            <div class="gold-divider-solid"></div>
+            <h1 class="shop__title">The Collection</h1>
+            <p class="shop__sub">{{ products().length }} pieces of uncompromising artistry</p>
+        </div>
+    </div>
+
+    <div class="shop__body container">
+
+        <!-- Mobile: Filter toggle -->
+        <div class="shop__mobile-filter-bar">
+            <button class="shop__filter-toggle" (click)="filtersOpen.set(!filtersOpen())">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round">
+                    <line x1="4" y1="6" x2="20" y2="6" />
+                    <line x1="8" y1="12" x2="20" y2="12" />
+                    <line x1="12" y1="18" x2="20" y2="18" />
+                </svg>
+                Filters
+                @if (activeFilterCount > 0) {
+                <span class="shop__filter-count">{{ activeFilterCount }}</span>
+                }
+            </button>
+            <div class="shop__sort-select">
+                <select [ngModel]="filters().sortBy" (ngModelChange)="setSortBy($event)">
+                    <option value="featured">Featured</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="newest">Newest</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Active Filter Tags -->
+        @if (activeFilterCount > 0) {
+        <div class="shop__active-filters">
+            @for (cat of filters().categories; track cat) {
+            <button class="filter-tag" (click)="removeCategoryFilter(cat)">
+                {{ cat }} ×
+            </button>
+            }
+            @for (shape of filters().frameShapes; track shape) {
+            <button class="filter-tag" (click)="toggleShape(shape)">{{ shape }} ×</button>
+            }
+            @for (color of filters().frameColors; track color) {
+            <button class="filter-tag" (click)="toggleFrameColor(color)">{{ color }} ×</button>
+            }
+            @for (lens of filters().lensShades; track lens) {
+            <button class="filter-tag" (click)="toggleLensShade(lens)">{{ lens }} ×</button>
+            }
+            @for (gender of filters().genders; track gender) {
+            <button class="filter-tag" (click)="toggleGender(gender)">{{ gender }} ×</button>
+            }
+            <button class="filter-tag filter-tag--clear" (click)="clearFilters()">Clear All</button>
+        </div>
+        }
+
+        <div class="shop__layout" [class.filters-open]="filtersOpen()">
+
+            <!-- FILTER SIDEBAR -->
+            <aside class="shop__filters" [class.open]="filtersOpen()">
+
+                <div class="filter-header">
+                    <span class="filter-header__title">Filters</span>
+                    @if (activeFilterCount > 0) {
+                    <button class="filter-header__clear" (click)="clearFilters()">Clear</button>
+                    }
+                    <button class="filter-header__close" (click)="filtersOpen.set(false)">×</button>
+                </div>
+
+                <!-- Category -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('category')">
+                    <button class="filter-group__heading" (click)="toggleSection('category')">
+                        <span>Category</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('category') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        @for (cat of categories; track cat) {
+                        <label class="filter-checkbox">
+                            <input type="checkbox" [checked]="filters().categories.includes(cat)"
+                                (change)="toggleCategory(cat)">
+                            <span class="filter-checkbox__box"></span>
+                            <span class="filter-checkbox__label">{{ cat | titlecase }}</span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- Frame Shape -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('shape')">
+                    <button class="filter-group__heading" (click)="toggleSection('shape')">
+                        <span>Frame Shape</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('shape') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        @for (shape of frameShapes; track shape) {
+                        <label class="filter-checkbox">
+                            <input type="checkbox" [checked]="filters().frameShapes.includes(shape)"
+                                (change)="toggleShape(shape)">
+                            <span class="filter-checkbox__box"></span>
+                            <span class="filter-checkbox__label">{{ shape | titlecase }}</span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- Frame Color -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('frameColor')">
+                    <button class="filter-group__heading" (click)="toggleSection('frameColor')">
+                        <span>Frame Color</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('frameColor') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        <div class="color-swatches">
+                            @for (opt of frameColorOptions; track opt.name) {
+                            <button class="color-swatch" [style.background]="opt.hex"
+                                [class.active]="filters().frameColors.includes(opt.name)"
+                                (click)="toggleFrameColor(opt.name)" [attr.title]="opt.name"
+                                [attr.aria-label]="opt.name">
+                            </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lens Shade -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('lens')">
+                    <button class="filter-group__heading" (click)="toggleSection('lens')">
+                        <span>Lens Shade</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('lens') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        <div class="color-swatches">
+                            @for (opt of lensOptions; track opt.name) {
+                            <button class="color-swatch" [style.background]="opt.hex"
+                                [class.active]="filters().lensShades.includes(opt.name)"
+                                (click)="toggleLensShade(opt.name)" [attr.title]="opt.name"
+                                [attr.aria-label]="opt.name">
+                            </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('gender')">
+                    <button class="filter-group__heading" (click)="toggleSection('gender')">
+                        <span>Gender</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('gender') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        @for (gender of genders; track gender) {
+                        <label class="filter-checkbox">
+                            <input type="checkbox" [checked]="filters().genders.includes(gender)"
+                                (change)="toggleGender(gender)">
+                            <span class="filter-checkbox__box"></span>
+                            <span class="filter-checkbox__label">{{ gender | titlecase }}</span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- Price -->
+                <div class="filter-group" [class.collapsed]="isCollapsed('price')">
+                    <button class="filter-group__heading" (click)="toggleSection('price')">
+                        <span>Price Range</span>
+                        <span class="filter-group__chevron">{{ isCollapsed('price') ? '+' : '−' }}</span>
+                    </button>
+                    <div class="filter-group__body">
+                        <div class="price-range">
+                            <div class="price-range__labels">
+                                <span>₹ 0</span>
+                                <span class="price-range__value">₹ {{ filters().priceMax | number }}</span>
+                            </div>
+                            <input type="range" class="price-slider" [min]="0" [max]="50000" [step]="1000"
+                                [ngModel]="filters().priceMax" (ngModelChange)="setPriceMax($event)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sort -->
+                <div class="filter-group desktop-sort">
+                    <div class="filter-group__heading" style="cursor:default">
+                        <span>Sort By</span>
+                    </div>
+                    <div class="filter-group__body">
+                        @for (opt of sortOptions; track opt.val) {
+                        <label class="filter-radio">
+                            <input type="radio" name="sortBy" [value]="opt.val" [checked]="filters().sortBy === opt.val"
+                                (change)="onSortChange(opt.val)">
+                            <span class="filter-radio__circle"></span>
+                            <span class="filter-radio__label">{{ opt.label }}</span>
+                        </label>
+                        }
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- Backdrop for mobile filters -->
+            @if (filtersOpen()) {
+            <div class="shop__filters-backdrop" (click)="filtersOpen.set(false)"></div>
+            }
+
+            <!-- PRODUCT GRID -->
+            <div class="shop__grid" [class.fading]="gridFading()">
+                @if (loading()) {
+                <div class="shop__loading">
+                    @for (i of [1,2,3,4,6,8]; track i) {
+                    <div class="skeleton-card"></div>
+                    }
+                </div>
+                } @else if (products().length === 0) {
+                <div class="shop__empty">
+                    <p>No products match your filters.</p>
+                    <button class="hero__cta" (click)="clearFilters()">Clear Filters</button>
+                </div>
+                } @else {
+                @for (product of products(); track product.id) {
+                <app-product-card [product]="product"></app-product-card>
+                }
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

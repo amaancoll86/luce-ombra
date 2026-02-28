@@ -1,0 +1,117 @@
+.three-scene {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: 100%;
+    height: 100%;
+
+    &__canvas-wrap {
+        position: relative;
+        flex: 1;
+        min-height: 400px;
+        background: var(--color-surface);
+        border: var(--border);
+
+        @media (max-width: 768px) {
+            min-height: 300px;
+        }
+    }
+
+    &__canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+        animation: fadeIn 0.6s ease 0.3s forwards;
+        opacity: 0;
+    }
+
+    &__hint {
+        position: absolute;
+        bottom: var(--space-md);
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: var(--space-xl);
+        background: rgba(8, 8, 8, 0.85);
+        border: var(--border);
+        padding: var(--space-sm) var(--space-lg);
+        animation: fadeIn 0.4s ease, fadeIn 0.4s ease 2.5s reverse forwards;
+        pointer-events: none;
+    }
+
+    &__hint-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-muted-light);
+        white-space: nowrap;
+    }
+
+    &__reset {
+        position: absolute;
+        top: var(--space-md);
+        right: var(--space-md);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(8, 8, 8, 0.8);
+        border: var(--border);
+        color: var(--color-muted);
+        transition: color var(--transition-base), border-color var(--transition-base);
+
+        &:hover {
+            color: var(--color-gold);
+            border-color: var(--color-gold-dark);
+        }
+    }
+
+    &__thumbs {
+        display: flex;
+        gap: var(--space-sm);
+        overflow-x: auto;
+        padding-bottom: 4px;
+
+        &::-webkit-scrollbar {
+            height: 3px;
+        }
+    }
+
+    &__thumb {
+        flex-shrink: 0;
+        width: 68px;
+        height: 68px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        padding: 0;
+        transition: border-color var(--transition-base);
+        cursor: pointer;
+
+        &.active {
+            border-color: var(--color-gold);
+        }
+
+        &:hover:not(.active) {
+            border-color: var(--color-muted);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+
+        &:hover img {
+            transform: scale(1.1);
+        }
+    }
+}

@@ -1,0 +1,180 @@
+<div class="checkout">
+    <div class="container">
+        <div class="checkout__header">
+            <div class="gold-divider-solid"></div>
+            <h1 class="checkout__title">Checkout</h1>
+        </div>
+
+        <div class="checkout__layout">
+
+            <!-- ===== ORDER SUMMARY ===== -->
+            <div class="order-summary">
+                <h2 class="checkout-section-title">Order Summary</h2>
+
+                @if (cartService.cartItems().length === 0) {
+                <div class="order-summary__empty">
+                    <p>Your cart is empty.</p>
+                    <a routerLink="/shop" class="pd-btn-primary"
+                        style="text-decoration:none;display:inline-block;text-align:center">Browse Collection</a>
+                </div>
+                } @else {
+                <ul class="order-summary__list">
+                    @for (item of cartService.cartItems(); track item.product.id + item.selectedSize) {
+                    <li class="order-item">
+                        <div class="order-item__image">
+                            <img [src]="item.product.images[0]" [alt]="item.product.name"
+                                onerror="this.src='assets/placeholder.jpg'">
+                        </div>
+                        <div class="order-item__info">
+                            <span class="order-item__name">{{ item.product.name }}</span>
+                            <span class="order-item__meta">
+                                {{ item.selectedFrameColor.name }} · {{ item.selectedLensShade.name }} · {{
+                                item.selectedSize }}
+                            </span>
+                            <span class="order-item__qty">Qty: {{ item.quantity }}</span>
+                        </div>
+                        <span class="order-item__price">{{ item.product.price * item.quantity | currencyFormat }}</span>
+                    </li>
+                    }
+                </ul>
+                }
+
+                <div class="order-summary__totals">
+                    <div class="order-summary__row">
+                        <span>Subtotal</span>
+                        <span>{{ subtotal | currencyFormat }}</span>
+                    </div>
+                    <div class="order-summary__row">
+                        <span>Shipping</span>
+                        <span>{{ shipping === 0 ? 'Free' : (shipping | currencyFormat) }}</span>
+                    </div>
+                    <div class="order-summary__row">
+                        <span>GST (18%)</span>
+                        <span>{{ tax | currencyFormat }}</span>
+                    </div>
+                    <div class="order-summary__divider"></div>
+                    <div class="order-summary__row order-summary__row--total">
+                        <span>Total</span>
+                        <span>{{ total | currencyFormat }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== FORM ===== -->
+            <form [formGroup]="form" (ngSubmit)="placeOrder()" class="checkout-form" novalidate>
+
+                <!-- Contact -->
+                <div class="form-section">
+                    <h2 class="checkout-section-title">Contact Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" formControlName="fullName" class="form-input"
+                                [class.invalid]="isInvalid('fullName')" placeholder="Arjun Sharma">
+                            @if (isInvalid('fullName')) { <span class="form-error">{{ getError('fullName') }}</span> }
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address *</label>
+                            <input type="email" formControlName="email" class="form-input"
+                                [class.invalid]="isInvalid('email')" placeholder="arjun@example.com">
+                            @if (isInvalid('email')) { <span class="form-error">{{ getError('email') }}</span> }
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number *</label>
+                            <input type="tel" formControlName="phone" class="form-input"
+                                [class.invalid]="isInvalid('phone')" placeholder="9876543210">
+                            @if (isInvalid('phone')) { <span class="form-error">{{ getError('phone') }}</span> }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping -->
+                <div class="form-section">
+                    <h2 class="checkout-section-title">Shipping Address</h2>
+                    <div class="form-grid">
+                        <div class="form-group form-group--full">
+                            <label class="form-label">Address Line 1 *</label>
+                            <input type="text" formControlName="address1" class="form-input"
+                                [class.invalid]="isInvalid('address1')" placeholder="42 Marine Drive, Flat 3B">
+                            @if (isInvalid('address1')) { <span class="form-error">{{ getError('address1') }}</span> }
+                        </div>
+                        <div class="form-group form-group--full">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" formControlName="address2" class="form-input"
+                                placeholder="Building, Landmark (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City *</label>
+                            <input type="text" formControlName="city" class="form-input"
+                                [class.invalid]="isInvalid('city')" placeholder="Mumbai">
+                            @if (isInvalid('city')) { <span class="form-error">{{ getError('city') }}</span> }
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State *</label>
+                            <input type="text" formControlName="state" class="form-input"
+                                [class.invalid]="isInvalid('state')" placeholder="Maharashtra">
+                            @if (isInvalid('state')) { <span class="form-error">{{ getError('state') }}</span> }
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PIN Code *</label>
+                            <input type="text" formControlName="pinCode" class="form-input"
+                                [class.invalid]="isInvalid('pinCode')" placeholder="400001" maxlength="6">
+                            @if (isInvalid('pinCode')) { <span class="form-error">{{ getError('pinCode') }}</span> }
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country *</label>
+                            <input type="text" formControlName="country" class="form-input" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="form-section">
+                    <h2 class="checkout-section-title">Payment Method</h2>
+                    <div class="payment-methods">
+                        @for (pm of paymentOptions; track pm.val) {
+                        <button type="button" class="payment-method" [class.active]="paymentMethod() === pm.val"
+                            (click)="setPaymentMethod(pm.val)">
+                            <span class="payment-method__radio"></span>
+                            {{ pm.label }}
+                        </button>
+                        }
+                    </div>
+
+                    @if (paymentMethod() === 'card') {
+                    <div class="form-group" style="margin-top:var(--space-md)">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" formControlName="cardNumber" class="form-input"
+                            placeholder="•••• •••• •••• ••••" maxlength="19">
+                    </div>
+                    }
+
+                    @if (paymentMethod() === 'upi') {
+                    <div class="form-group" style="margin-top:var(--space-md)">
+                        <label class="form-label">UPI ID</label>
+                        <input type="text" formControlName="upiId" class="form-input" placeholder="yourname@upi">
+                    </div>
+                    }
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="checkout-submit-btn" [disabled]="submitting()">
+                    @if (submitting()) {
+                    <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                    </svg>
+                    Processing...
+                    } @else {
+                    Place Order
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    }
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
