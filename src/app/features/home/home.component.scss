@@ -292,6 +292,142 @@
     }
 }
 
+// ============================================================
+// MARKDOWNS VIDEO BANNER — preserves video ratio, dark edges
+// ============================================================
+.markdowns {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    // Deep black background fills the bars around the video
+    background: #080808;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    // ── Video — contained, never cropped ─────────────────────────────────
+    &__video {
+        position: relative; // in normal flow so it finds its size
+        z-index: 0;
+        // Fill the available space but never exceed it
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: 100%;
+        object-fit: contain; // preserves original aspect ratio
+        display: block;
+    }
+
+    // ── Edge gradients — dark glow bleeding from each side ───────────────
+    // These sit above the video but below the text overlay
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+
+        // Left edge bleed
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                // Left edge
+                linear-gradient(to right, #080808 0%, transparent 32%),
+                // Right edge
+                linear-gradient(to left, #080808 0%, transparent 32%),
+                // Top edge
+                linear-gradient(to bottom, #080808 0%, transparent 22%),
+                // Bottom edge
+                linear-gradient(to top, #080808 0%, transparent 22%);
+        }
+
+        // Centre vignette — subtle darkening over the video face
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center,
+                    rgba(4, 4, 4, 0.38) 0%,
+                    transparent 65%);
+        }
+    }
+
+    // ── Text + CTA ────────────────────────────────────────────────────────
+    &__content {
+        position: absolute; // sits over everything
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0px;
+        text-align: center;
+        padding: 0 var(--space-xl);
+        pointer-events: none; // let clicks pass through to video if needed
+        padding-bottom: 30px;
+
+        // Re-enable pointer events on interactive children
+        a {
+            pointer-events: auto;
+        }
+    }
+
+    // "Upto 40% off" — small italic line above headline
+    &__eyebrow {
+        font-family: var(--font-display);
+        font-size: clamp(14px, 1.6vw, 18px);
+        font-weight: 300;
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.92);
+        letter-spacing: 0.04em;
+        margin: 0;
+    }
+
+    // "New Markdowns" — large cinematic headline
+    &__headline {
+        font-family: var(--font-display);
+        font-size: clamp(44px, 4vw, 88px);
+        font-weight: 300;
+        color: var(--color-white);
+        line-height: 1.0;
+        margin: 0 0 16px;
+        letter-spacing: -0.01em;
+    }
+
+    // "Shop Collection" — white filled button
+    &__cta {
+        display: inline-block;
+        padding: 13px 36px;
+        background: var(--color-white);
+        color: var(--color-bg);
+        font-family: var(--font-body);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+
+        &:hover {
+            background: var(--color-gold);
+            color: var(--color-bg);
+            transform: translateY(-2px);
+        }
+    }
+
+    @media (max-width: 600px) {
+        height: 80vh;
+
+        &__headline {
+            font-size: clamp(36px, 10vw, 56px);
+        }
+    }
+}
+
 // BESTSELLERS
 .bestsellers {
     &__header {

@@ -46,6 +46,26 @@
 </section>
 
 <!-- ============================================================ -->
+<!--  NEW MARKDOWNS — Fullscreen video banner                     -->
+<!-- ============================================================ -->
+<section class="markdowns">
+    <!-- Autoplay muted looping background video -->
+    <video class="markdowns__video" autoplay [muted]="true" loop playsinline preload="auto">
+        <source src="assets/Video-988.mp4" type="video/mp4">
+    </video>
+
+    <!-- Dark gradient overlay so text stays legible -->
+    <div class="markdowns__overlay"></div>
+
+    <!-- Centred text + CTA -->
+    <div class="markdowns__content">
+        <p class="markdowns__eyebrow">Upto 40% off</p>
+        <h2 class="markdowns__headline">New Markdowns</h2>
+        <a routerLink="/shop" class="markdowns__cta">Shop Collection</a>
+    </div>
+</section>
+
+<!-- ============================================================ -->
 <!--  SCROLL STORYTELLING — Section 1: The Craft                  -->
 <!-- ============================================================ -->
 <section class="story-section" id="story-craft">
