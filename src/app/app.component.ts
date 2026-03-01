@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { SpeedInsightsService } from './core/services/speed-insights.service';
 
 @Component({
   selector: 'app-root',
@@ -20,4 +21,11 @@ import { FooterComponent } from './shared/components/footer/footer.component';
     }
   `],
 })
-export class AppComponent { }
+export class AppComponent implements OnInit {
+  private speedInsights = inject(SpeedInsightsService);
+
+  ngOnInit(): void {
+    // Initialize Vercel Speed Insights
+    this.speedInsights.init();
+  }
+}
