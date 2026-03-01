@@ -422,6 +422,8 @@ export const PRODUCTS: Product[] = [
         tags: ['sports', 'performance', 'active'],
         rating: 4.5,
         reviewCount: 87,
+        isBestseller: true,
+        video: 'assets/products/ferro-locente/ferro-locente-3d.mp4',
     },
     // 8. CARVO — Variant 1
     {

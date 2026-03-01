@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
 import { CurrencyFormatPipe } from '../../pipes/currency-format.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 
 @Component({
     selector: 'app-product-card',
     standalone: true,
-    imports: [RouterLink, CommonModule, CurrencyFormatPipe],
+    imports: [RouterLink, CommonModule, CurrencyFormatPipe, SafeUrlPipe],
     templateUrl: './product-card.component.html',
     styleUrl: './product-card.component.scss',
 })

@@ -2,6 +2,14 @@
     (mouseleave)="isHovered.set(false)">
     <a [routerLink]="['/product', product.id]" class="product-card__image-link">
         <div class="product-card__image-wrap">
+
+            @if (product.video) {
+            <!-- ── Video card (Ferro Lucente) ─────────────────────────── -->
+            <video class="product-card__video" [src]="product.video | safeUrl" autoplay [muted]="true" loop playsinline
+                preload="auto">
+            </video>
+            } @else {
+            <!-- ── Standard image card ───────────────────────────────── -->
             <!-- Primary image -->
             <img class="product-card__img product-card__img--primary" [src]="product.images[0]" [alt]="product.name"
                 loading="lazy" [class.fade-out]="isHovered() && product.images.length > 1">
@@ -10,6 +18,7 @@
             @if (product.images.length > 1) {
             <img class="product-card__img product-card__img--secondary" [src]="product.images[1]"
                 [alt]="product.name + ' angle'" loading="lazy" [class.fade-in]="isHovered()">
+            }
             }
 
             <!-- Badges -->

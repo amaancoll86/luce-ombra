@@ -14,9 +14,9 @@ export interface ProductSpec {
 }
 
 export type ProductCategory = 'sunglasses' | 'optical' | 'sports' | 'limited';
-export type ProductGender   = 'men' | 'women' | 'unisex';
-export type ProductSize     = 'S' | 'M' | 'L' | 'XL';
-export type FrameShape      = 'aviator' | 'wayfarer' | 'round' | 'cat-eye' | 'rectangle' | 'oversized';
+export type ProductGender = 'men' | 'women' | 'unisex';
+export type ProductSize = 'S' | 'M' | 'L' | 'XL';
+export type FrameShape = 'aviator' | 'wayfarer' | 'round' | 'cat-eye' | 'rectangle' | 'oversized';
 
 export interface Product {
   id: string;
@@ -32,6 +32,7 @@ export interface Product {
   originalPrice?: number;
   images: string[];
   modelPath?: string;
+  video?: string;
   description: string;
   specs: ProductSpec[];
   tags: string[];
@@ -54,13 +55,13 @@ export interface FilterState {
 }
 
 export const DEFAULT_FILTER_STATE: FilterState = {
-  categories:  [],
+  categories: [],
   frameShapes: [],
   frameColors: [],
-  lensShades:  [],
-  genders:     [],
-  priceMin:    0,
-  priceMax:    50000,
-  sortBy:      'featured',
+  lensShades: [],
+  genders: [],
+  priceMin: 0,
+  priceMax: 50000,
+  sortBy: 'featured',
   searchQuery: '',
 };
