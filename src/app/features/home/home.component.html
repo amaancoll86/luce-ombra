@@ -66,6 +66,22 @@
 </section>
 
 <!-- ============================================================ -->
+<!--  COLLECTIONS — Infinite Grid Menu                          -->
+<!-- ============================================================ -->
+<section class="collections-section">
+    <div class="container">
+        <div class="collections__header">
+            <div class="gold-divider-solid"></div>
+            <span class="label">Our Collections</span>
+        </div>
+
+        <div class="collections__grid">
+            <app-infinite-menu [items]="collections" [scale]="1"></app-infinite-menu>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
 <!--  SCROLL STORYTELLING — Section 1: The Craft                  -->
 <!-- ============================================================ -->
 <section class="story-section" id="story-craft">
@@ -147,7 +163,7 @@
 </section>
 
 <!-- CATEGORY STRIP -->
-<section class="categories section">
+<!-- <section class="categories section">
     <div class="container">
         <div class="categories__header">
             <div class="gold-divider-solid"></div>
@@ -174,7 +190,7 @@
             }
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- ============================================================ -->
 <!--  SCROLL STORYTELLING — Section 2: The Vision                 -->

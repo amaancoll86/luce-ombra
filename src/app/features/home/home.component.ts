@@ -9,13 +9,15 @@ import { Product } from '../../core/models/product.model';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MenuItem, InfiniteMenuComponent } from '../../shared/components/infinite-menu/infinite-menu.component';
+import { collections } from '../../core/data/collections.data';
 
 gsap.registerPlugin(ScrollTrigger);
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [RouterLink, CommonModule, ProductCardComponent],
+    imports: [RouterLink, CommonModule, ProductCardComponent, InfiniteMenuComponent],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
 })
@@ -75,6 +77,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             ctaLink: '/shop',
         },
     ];
+
+    public collections: MenuItem[] = collections;
 
     ngOnInit(): void {
         this.productService.getFeatured().subscribe(products => {

@@ -1,0 +1,24 @@
+<!-- infinite-menu.component.html -->
+<div class="infinite-menu-wrapper">
+
+    <!-- WebGL canvas — the engine attaches to this element -->
+    <canvas #canvasEl id="infinite-grid-menu-canvas"></canvas>
+
+    <!-- Overlay UI: only rendered when an active item is available -->
+    <ng-container *ngIf="activeItem">
+
+        <h2 class="face-title" [class.active]="!isMoving" [class.inactive]="isMoving">
+            {{ activeItem.title }}
+        </h2>
+
+        <p class="face-description" [class.active]="!isMoving" [class.inactive]="isMoving">
+            {{ activeItem.description }}
+        </p>
+
+        <div class="action-button" [class.active]="!isMoving" [class.inactive]="isMoving" (click)="handleButtonClick()">
+            <p class="action-button-icon">&#x2197;</p>
+        </div>
+
+    </ng-container>
+
+</div>
