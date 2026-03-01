@@ -40,7 +40,7 @@
         <button class="three-scene__thumb" [class.active]="activeThumb() === i" (click)="loadImage(i)"
             [attr.aria-label]="'View angle ' + (i + 1)">
             <img [src]="img" [alt]="product.name + ' view ' + (i + 1)" loading="lazy"
-                onerror="this.src='assets/placeholder.jpg'">
+                onerror="this.onerror=null;this.src='assets/placeholder.svg'">
         </button>
         }
     </div>

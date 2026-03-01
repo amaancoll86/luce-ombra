@@ -12,12 +12,14 @@
             <!-- ── Standard image card ───────────────────────────────── -->
             <!-- Primary image -->
             <img class="product-card__img product-card__img--primary" [src]="product.images[0]" [alt]="product.name"
-                loading="lazy" [class.fade-out]="isHovered() && product.images.length > 1">
+                loading="lazy" [class.fade-out]="isHovered() && product.images.length > 1"
+                onerror="this.onerror=null;this.src='assets/placeholder.svg'">
 
             <!-- Secondary image (hover) -->
             @if (product.images.length > 1) {
             <img class="product-card__img product-card__img--secondary" [src]="product.images[1]"
-                [alt]="product.name + ' angle'" loading="lazy" [class.fade-in]="isHovered()">
+                [alt]="product.name + ' angle'" loading="lazy" [class.fade-in]="isHovered()"
+                onerror="this.onerror=null;this.src='assets/placeholder.svg'">
             }
             }
 
